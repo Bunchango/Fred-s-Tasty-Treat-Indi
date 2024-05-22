@@ -1,4 +1,5 @@
 #include "helper.h"
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -106,4 +107,8 @@ bool Helper::isValidFloat(std::string s) {
   float num;
   return isNumber(s) && (s.find(".") != std::string::npos) &&
          ((iss >> num) && iss.eof());
+}
+
+void Helper::sortIntVector(std::vector<int> &v) {
+  std::sort(v.begin(), v.end());
 }
