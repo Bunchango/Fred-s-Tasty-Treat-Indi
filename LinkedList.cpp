@@ -6,6 +6,7 @@
 LinkedList::LinkedList() {
   this->head = nullptr;
   this->count = 0;
+  this->end = nullptr;
 }
 
 LinkedList::~LinkedList() {
@@ -26,7 +27,9 @@ void LinkedList::append(Node *node) {
       current = current->next;
     }
     current->next = node;
+    node->prev = current;
   }
+  this->end = node;
   this->count++;
 }
 
@@ -47,25 +50,35 @@ Node *LinkedList::getById(std::string id) {
 
 void LinkedList::remove(std::string id) {
   Node *current = this->head;
-  Node *previous = nullptr;
 
-  // Traverse the list to find the node that matches the ID
+  // Find the Node that matches the ID
   while (current != nullptr && current->data->id != id) {
-    previous = current;
     current = current->next;
   }
 
-  // If the node is found
+  // If the Node is found
   if (current != nullptr) {
-    // If the node found is the head of the LinkedList
-    if (previous == nullptr) {
-      // Then set the next Node as the new head
-      head = current->next;
-    } else {
-      // If not, then redirect the pointer of the previous Node to skip a Node
-      previous->next = current->next;
+    // If the Node is the only Node in the list
+    if (current->prev == nullptr && current->next == nullptr) {
+      this->head = nullptr;
+      this->end = nullptr;
     }
-
+    // If the Node is at the head of the list
+    else if (current->prev == nullptr && current->next != nullptr) {
+      this->head = current->next;
+      this->head->prev = nullptr;
+    }
+    // If the Node is at the end of the list
+    else if (current->prev != nullptr && current->next == nullptr) {
+      this->end = current->prev;
+      this->end->next = nullptr;
+    }
+    // If the Node is at the middle of the list
+    else {
+      current->prev->next = current->next;
+      current->next->prev = current->prev;
+    }
+    this->count--;
     delete current;
   }
 }
