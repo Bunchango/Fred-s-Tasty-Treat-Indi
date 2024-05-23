@@ -31,7 +31,7 @@ DataManager::DataManager(std::string mealFileName, std::string moneyFileName) {
 
     if (tokens.size() == 4 && tokens[1].size() <= NAMELEN &&
         tokens[2].size() <= DESCLEN && FoodItem::isValidIdFormat(tokens[0]) &&
-        Price::isValidPrice(tokens[3])) {
+        Price::isValidPrice(tokens[3]) && !this->meals->getById(tokens[0])) {
       // Slit the price into its integer and fractional part to create Price
       // object
       Helper::splitString(Helper::floatToString(std::stof(tokens[3]), 2),
