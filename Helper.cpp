@@ -112,3 +112,11 @@ bool Helper::isValidFloat(std::string s) {
 void Helper::sortIntVector(std::vector<int> &v) {
   std::sort(v.begin(), v.end());
 }
+
+void Helper::printColoredText(const std::string &text,
+                              const std::string &color) {
+
+  // ANSI color codes
+  const std::string reset = "\033[0m";
+  std::cout << color << text << reset;
+}

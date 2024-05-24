@@ -39,5 +39,8 @@ public:
   static bool isValidFloat(std::string s);
 
   static void sortIntVector(std::vector<int> &v);
+
+  static void printColoredText(const std::string &text,
+                               const std::string &color);
 };
 #endif

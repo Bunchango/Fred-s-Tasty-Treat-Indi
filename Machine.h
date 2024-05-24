@@ -5,6 +5,8 @@
 #include "LinkedList.h"
 #include <string>
 
+#define RED "\033[31m"
+
 class Machine {
 private:
   // A pointer to an object to handle reading / saving / containing data

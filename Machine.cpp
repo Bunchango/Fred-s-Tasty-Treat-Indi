@@ -118,15 +118,18 @@ void Machine::purchaseMeal() {
   while (run) {
     if (priceAsCents > 0) {
       // If the user hasn't fully paid for the item
-      std::cout << "You still need to give us: $ " << (float)priceAsCents / 100
-                << ": ";
+      std::cout << "You still need to give us: $ ";
+      Helper::printColoredText(
+          Helper::floatToString(((float)priceAsCents / 100), 2), RED);
+      std::cout << ": ";
     }
 
     std::string input = Helper::readInput();
 
     // Check if user wants to exit
     if (std::cin.eof() || input.empty()) {
-      std::cout << "Cancel purchase" << "\n";
+      std::cout << "\n"
+                << "Cancel purchase" << "\n";
       std::cin.clear(); // Clear the error flags
 
       // When exit, remove the coins from the system
