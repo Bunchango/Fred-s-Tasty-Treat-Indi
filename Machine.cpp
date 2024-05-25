@@ -369,11 +369,12 @@ void Machine::displayBalance() {
     std::cout << SEPARATOR << MONEY_SYMBOL << EMPTY_SPACE;
 
     for (int i = 0;
-         i < valuelen - (int)Helper::floatToString(coin.getTotal(), 2).size();
+         i < valuelen -
+                 (int)Helper::floatToString(coin.getTotal(), PRECISION).size();
          i++) {
       std::cout << EMPTY_SPACE;
     }
-    std::cout << Helper::floatToString(coin.getTotal(), 2) << "\n";
+    std::cout << Helper::floatToString(coin.getTotal(), PRECISION) << "\n";
   }
 
   // Display separator line
@@ -392,11 +393,12 @@ void Machine::displayBalance() {
   std::cout << MONEY_SYMBOL << EMPTY_SPACE;
 
   float total = this->data->balance->getTotalValue();
-  for (int i = 0; i < valuelen - (int)Helper::floatToString(total, 2).size();
+  for (int i = 0;
+       i < valuelen - (int)Helper::floatToString(total, PRECISION).size();
        i++) {
     std::cout << EMPTY_SPACE;
   }
-  std::cout << Helper::floatToString(total, 2) << "\n";
+  std::cout << Helper::floatToString(total, PRECISION) << "\n";
 }
 
 void Machine::addFood() {

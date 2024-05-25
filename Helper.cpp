@@ -1,4 +1,5 @@
 #include "helper.h"
+#include "Machine.h"
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -68,7 +69,7 @@ int Helper::getLongestIntegerPart(std::vector<float> numbers) {
 
   for (float num : numbers) {
     std::vector<std::string> splitted = {};
-    std::string numStr = floatToString(num, 2);
+    std::string numStr = floatToString(num, PRECISION);
     Helper::splitString(numStr, splitted, ".");
 
     if ((int)splitted[0].size() > longestInteger) {
@@ -82,7 +83,7 @@ int Helper::getLongestIntegerPart(std::vector<float> numbers) {
 std::string Helper::formatFloatToString(float number, int longestIntegerPart) {
   std::string result = "";
   std::vector<std::string> splitNumber = {};
-  splitString(floatToString(number, 2), splitNumber, ".");
+  splitString(floatToString(number, PRECISION), splitNumber, ".");
 
   if ((int)splitNumber[0].size() < longestIntegerPart) {
     for (int i = 0; i < longestIntegerPart - (int)splitNumber[0].size(); i++) {
