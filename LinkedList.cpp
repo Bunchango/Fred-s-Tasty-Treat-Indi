@@ -7,6 +7,10 @@ LinkedList::LinkedList() {
   this->head = nullptr;
   this->count = 0;
   this->end = nullptr;
+  this->next = nullptr;
+  // By default, the LinkedList won't have a category, this is so that it works
+  // the same for the original data format
+  this->category = "";
 }
 
 LinkedList::~LinkedList() {
@@ -148,4 +152,8 @@ void LinkedList::sortByAlpha() {
     }
     last = ptr1;
   } while (swapped);
+}
+
+bool LinkedList::isValidCategory(std::string cat) {
+  return !cat.empty() && cat.size() <= MAX_CAT_LEN;
 }

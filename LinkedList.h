@@ -3,8 +3,15 @@
 #include "Node.h"
 #include <vector>
 
+#define MAX_CAT_LEN 10
+
 class LinkedList {
 public:
+  // Pointer to the next LinkedList
+  LinkedList *next;
+  // A special category of items
+  std::string category;
+
   LinkedList();
   ~LinkedList();
 
@@ -28,6 +35,9 @@ public:
 
   // Sort the LinkedList by alphabetical order
   void sortByAlpha();
+
+  // Check if category is in correct forrmat
+  static bool isValidCategory(std::string cat);
 
 private:
   // the beginning of the list

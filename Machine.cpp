@@ -2,6 +2,7 @@
 #include "Coin.h"
 #include "DataManager.h"
 #include "Helper.h"
+#include "LinkedList.h"
 #include "Node.h"
 #include "iostream"
 #include <string>
@@ -118,9 +119,9 @@ void Machine::purchaseMeal() {
   while (run) {
     if (priceAsCents > 0) {
       // If the user hasn't fully paid for the item
-      std::cout << "You still need to give us: $ ";
+      std::cout << "You still need to give us: ";
       Helper::printColoredText(
-          Helper::floatToString(((float)priceAsCents / 100), 2), RED);
+          "$" + Helper::floatToString(((float)priceAsCents / 100), 2), RED);
       std::cout << ": ";
     }
 
@@ -142,9 +143,12 @@ void Machine::purchaseMeal() {
             coin.count -= 1;
             // Print out the refund
             if (coin.denom < 100) {
-              std::cout << coin.denom << "c ";
+              Helper::printColoredText(std::to_string(coin.denom) + "c ",
+                                       GREEN);
             } else {
-              std::cout << "$" << coin.denom / 100 << " ";
+              Helper::printColoredText("$" + std::to_string(coin.denom / 100),
+                                       GREEN);
+              std::cout << " ";
             }
           }
         }
@@ -225,57 +229,91 @@ void Machine::purchaseMeal() {
     for (int change : changes) {
       // Print the denomination
       if (change < 100) {
-        std::cout << change << "c ";
+        Helper::printColoredText(std::to_string(change) + "c ", GREEN);
       } else {
-        std::cout << "$" << change / 100 << " ";
+        Helper::printColoredText("$" + std::to_string(change / 100), GREEN);
+        std::cout << " ";
       }
     }
   }
 }
 
 void Machine::displayMeals() {
-  this->data->meals->sortByAlpha();
-  Node *currentMeal = this->data->meals->getFirst();
+  /*   this->data->meals->sortByAlpha(); */
+  LinkedList *currentCat = this->data->meals->getFirst();
 
-  // Display first row
-  std::cout << "ID";
-  for (int i = 0; i < IDLEN - 2;
-       i++) { // Accounting for the length of string ID
-    std::cout << EMPTY_SPACE;
-  }
-
-  // Get the maximum size of PRICELEN
-  int longestInteger =
-      Helper::getLongestIntegerPart(this->data->meals->getPrices());
-  int pricelen = longestInteger + 3;
-
-  std::cout << SEPARATOR << "Name";
-  for (int i = 0; i < NAMELEN - 4; i++) {
-    std::cout << EMPTY_SPACE;
-  }
-  std::cout << SEPARATOR << "Length";
-  for (int i = 0; i < pricelen - 6; i++) {
-    std::cout << EMPTY_SPACE;
-  }
-
-  std::cout << "\n";
-  // Display separator line
-  for (int i = 0; i < IDLEN + NAMELEN + pricelen + 3 + SEPARATOR_NUM; i++) {
-    std::cout << LINE;
-  }
-  std::cout << "\n";
-
-  while (currentMeal != nullptr) {
-    std::cout << currentMeal->data->id << SEPARATOR << currentMeal->data->name;
-    for (int i = 0; i < NAMELEN - (int)currentMeal->data->name.size(); i++) {
+  if (!currentCat) {
+    // If there are no data, just display the board
+    std::cout << "ID";
+    for (int i = 0; i < IDLEN - 2;
+         i++) { // Accounting for the length of string ID
       std::cout << EMPTY_SPACE;
     }
-    std::cout << SEPARATOR << MONEY_SYMBOL;
 
-    std::cout << Helper::formatFloatToString(currentMeal->data->price.value(),
-                                             longestInteger)
-              << "\n";
-    currentMeal = currentMeal->next;
+    std::cout << SEPARATOR << "Name";
+    for (int i = 0; i < NAMELEN - 4; i++) {
+      std::cout << EMPTY_SPACE;
+    }
+    std::cout << SEPARATOR << "Length";
+
+    std::cout << "\n";
+    // Display separator line, 6 is accounting for the length of string Length
+    for (int i = 0; i < IDLEN + NAMELEN + 6 + 3 + SEPARATOR_NUM; i++) {
+      std::cout << LINE;
+    }
+    std::cout << "\n";
+  }
+
+  while (currentCat) {
+    currentCat->sortByAlpha();
+    Node *currentMeal = currentCat->getFirst();
+
+    if (!currentCat->category.empty()) {
+      std::cout << "Category: " << currentCat->category << "\n";
+    }
+
+    // Display first row
+    std::cout << "ID";
+    for (int i = 0; i < IDLEN - 2;
+         i++) { // Accounting for the length of string ID
+      std::cout << EMPTY_SPACE;
+    }
+
+    // Get the maximum size of PRICELEN
+    int longestInteger = Helper::getLongestIntegerPart(currentCat->getPrices());
+    int pricelen = longestInteger + 3;
+
+    std::cout << SEPARATOR << "Name";
+    for (int i = 0; i < NAMELEN - 4; i++) {
+      std::cout << EMPTY_SPACE;
+    }
+    std::cout << SEPARATOR << "Length";
+    for (int i = 0; i < pricelen - 6; i++) {
+      std::cout << EMPTY_SPACE;
+    }
+
+    std::cout << "\n";
+    // Display separator line
+    for (int i = 0; i < IDLEN + NAMELEN + pricelen + 3 + SEPARATOR_NUM; i++) {
+      std::cout << LINE;
+    }
+    std::cout << "\n";
+
+    while (currentMeal) {
+      std::cout << currentMeal->data->id << SEPARATOR
+                << currentMeal->data->name;
+      for (int i = 0; i < NAMELEN - (int)currentMeal->data->name.size(); i++) {
+        std::cout << EMPTY_SPACE;
+      }
+      std::cout << SEPARATOR << MONEY_SYMBOL;
+
+      std::cout << Helper::formatFloatToString(currentMeal->data->price.value(),
+                                               longestInteger)
+                << "\n";
+      currentMeal = currentMeal->next;
+    }
+    currentCat = currentCat->next;
+    std::cout << "\n";
   }
 }
 
@@ -363,6 +401,7 @@ void Machine::displayBalance() {
 
 void Machine::addFood() {
   std::string mealID = FoodItem::constructID(this->data->meals->getNextId());
+  std::string itemCat = "";
   std::string itemName = "";
   std::string itemDesc = "";
   std::string itemPrice = "";
@@ -379,10 +418,34 @@ void Machine::addFood() {
               << ".\n";
   }
 
+  // If the data is in new format, then the user needs to specify a category for
+  // the item
+  LinkedList *currentCat = this->data->meals->getFirst();
+  if (currentCat && !currentCat->category.empty()) {
+    bool cat = true;
+    while (cat) {
+      std::cout << "Enter the item category: ";
+      itemCat = Helper::readInput();
+
+      if (itemCat.empty()) {
+        std::cout << "Cancel add" << "\n";
+        std::cin.clear();
+        name = false;
+        cat = false;
+      }
+
+      if (cat && !LinkedList::isValidCategory(itemCat)) {
+        std::cout << "Invalid item category" << "\n";
+      } else if (name && LinkedList::isValidCategory(itemCat)) {
+        cat = false;
+      }
+    }
+  }
+
   while (name) {
     std::cout << "Enter the item name: ";
     itemName = Helper::readInput();
-    if (std::cin.eof()) {
+    if (itemName.empty()) {
       std::cout << "Cancel add" << "\n";
       std::cin.clear();
       name = false;
@@ -400,7 +463,7 @@ void Machine::addFood() {
     std::cout << "Enter the item description: ";
     itemDesc = Helper::readInput();
 
-    if (std::cin.eof()) {
+    if (itemDesc.empty()) {
       std::cout << "Cancel add" << "\n";
       std::cin.clear();
       desc = false;
@@ -418,7 +481,7 @@ void Machine::addFood() {
     std::cout << "Enter the price for this item (in cents): ";
     itemPrice = Helper::readInput();
 
-    if (std::cin.eof()) {
+    if (itemPrice.empty()) {
       std::cout << "Cancel add" << "\n";
       std::cin.clear();
       price = false;
@@ -443,10 +506,15 @@ void Machine::addFood() {
     FoodItem *newMeal = new FoodItem(mealID, itemName, itemDesc, price);
     Node *newNode = new Node();
     newNode->data = newMeal;
-    this->data->meals->append(newNode);
-
+    // Create a new category if the inputed category doesn't exist
+    if (!this->data->meals->getByCat(itemCat)) {
+      LinkedList *newCat = new LinkedList();
+      newCat->category = itemCat;
+      this->data->meals->append(newCat);
+    }
+    this->data->meals->appendNode(itemCat, newNode);
     std::cout << "This item \"" << itemName << " - " << itemDesc << "\""
-              << "has now been added to the food menu" << "\n";
+              << " has now been added to the food menu" << "\n";
   }
 }
 
