@@ -10,9 +10,9 @@
 int main(int argc, char **argv) {
   // Read arguments into an array of strings
   // bools to toggle enhancements
-  bool useDoubly = false;
-  bool useTwoD = false;
-  bool useColour = false;
+  bool useDoubly = true;
+  bool useTwoD = true;
+  bool useColour = true;
 
   if (argc <= 7 && argc >= 3) {
     std::string strArgs[5];
@@ -22,10 +22,10 @@ int main(int argc, char **argv) {
 
       // Check if the user want the enhancements
 
-      if (strArg == "-use2DLL") {
-        useTwoD = true;
-      } else if (strArg == "-useColour") {
-        useColour = true;
+      if (strArg == "-no2DLL") {
+        useTwoD = false;
+      } else if (strArg == "-noColour") {
+        useColour = false;
       }
     }
 
