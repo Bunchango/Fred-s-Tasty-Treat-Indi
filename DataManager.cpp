@@ -60,7 +60,7 @@ void DataManager::readNewFormat(std::ifstream &mealFile) {
     if (tokens.size() == NEW_FORMAT_PARAM_NUM && tokens[1].size() <= NAMELEN &&
         tokens[2].size() <= DESCLEN && FoodItem::isValidIdFormat(tokens[0]) &&
         Price::isValidPrice(tokens[3]) && !this->meals->getById(tokens[0]) &&
-        tokens[4].size() <= MAX_CAT_LEN) {
+        tokens[4].size() <= MAX_CAT_LEN && !tokens[4].empty()) {
       // If the category has not exist, then we create a new one and append it
       if (!this->meals->getByCat(tokens[4])) {
         LinkedList *newCat = new LinkedList();
