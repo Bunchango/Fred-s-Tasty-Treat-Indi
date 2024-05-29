@@ -14,6 +14,10 @@ private:
   // A pointer to an object to handle reading / saving / containing data
   DataManager *data;
 
+  // To toggle configurations
+  bool useTwoDLinkedList;
+  bool useColour;
+
   /*
    * Purchase a meal given an id
    */
@@ -52,7 +56,8 @@ private:
 
 public:
   // Initialize and destroy member variables
-  Machine(std::string mealFile, std::string moneyFile);
+  Machine(std::string mealFile, std::string moneyFile, bool useTwoDLinkedList,
+          bool useColour);
   ~Machine();
 
   /*
