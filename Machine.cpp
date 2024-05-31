@@ -9,12 +9,11 @@
 #include <vector>
 
 Machine::Machine(std::string mealFileName, std::string moneyFileName,
-                 bool useTwoDLinkedList, bool useDoublyLL, bool useColour) {
+                 bool useTwoDLinkedList, bool useColour) {
   DataManager *data = new DataManager(mealFileName, moneyFileName);
   this->data = data;
   this->useColour = useColour;
   this->useTwoDLinkedList = useTwoDLinkedList;
-  this->useDoublyLL = useDoublyLL;
 }
 
 Machine::~Machine() {
