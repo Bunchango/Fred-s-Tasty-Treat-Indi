@@ -10,7 +10,6 @@
 int main(int argc, char **argv) {
   // Read arguments into an array of strings
   // bools to toggle enhancements
-  bool useDoubly = true;
   bool useTwoD = true;
   bool useColour = true;
 
