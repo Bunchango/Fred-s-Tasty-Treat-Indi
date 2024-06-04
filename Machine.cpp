@@ -533,6 +533,12 @@ void Machine::addFood() {
     // Create a new category if the inputed category doesn't exist
     if (!this->data->meals->getByCat(itemCat)) {
       LinkedList *newCat = new LinkedList();
+
+      if (itemCat.empty() && !this->useTwoDLinkedList &&
+          !currentCat->category.empty()) {
+        itemCat = "Uncategorized";
+      }
+
       newCat->category = itemCat;
       this->data->meals->append(newCat);
     }

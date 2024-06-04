@@ -3,7 +3,7 @@
 #include "Node.h"
 #include <vector>
 
-#define MAX_CAT_LEN 10
+#define MAX_CAT_LEN 40
 
 class LinkedList {
 public:
