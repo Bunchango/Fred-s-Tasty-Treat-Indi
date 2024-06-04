@@ -5,7 +5,7 @@ all: ftt
 clean:
 	rm -rf ftt *.o *.dSYM
 
-ftt: DataManager.o Helper.o Balance.o Machine.o Coin.o Node.o LinkedList.o ftt.o
+ftt: DataManager.o Helper.o Balance.o Machine.o Coin.o Node.o LinkedList.o ftt.o TwoDimLinkedList.o
 	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
 
 %.o: %.cpp
